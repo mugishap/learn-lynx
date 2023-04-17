@@ -9,15 +9,18 @@ import javax.persistence.*;
 import java.util.UUID;
 
 @Entity
+@Table(name = "tags")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "course_contents")
-public class CourseContent {
+public class Tag {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
+    @Column(name = "tag_name")
+    private String tagName;
 
 }
