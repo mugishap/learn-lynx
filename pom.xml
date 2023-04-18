@@ -8,12 +8,12 @@
         <version>2.5.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.java.main</groupId>
-    <artifactId>spring-starter</artifactId>
+    <groupId>live.learnlynx.api</groupId>
+    <artifactId>learn-lynx</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
-    <name>spring-starter</name>
-    <description>Demo project for Spring Boot</description>
+    <name>learn-lynx</name>
+    <description>ELearning platform developed in Springboot</description>
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -21,6 +21,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
