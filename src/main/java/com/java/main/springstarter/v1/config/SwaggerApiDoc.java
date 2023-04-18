@@ -84,8 +84,8 @@ public class SwaggerApiDoc extends WebMvcConfigurationSupport {
     }
 
     private ApiInfo apiInfo() {
-        return new ApiInfoBuilder().title("Spring starter API").description("APIs Documentation")
-                .termsOfServiceUrl("https://github.com/divinirakiza/spring-starter")
+        return new ApiInfoBuilder().title("Learn Lynx API").description("APIs Documentation for LearnLynx E-Learning Module")
+                .termsOfServiceUrl("https://github.com/mugishap/learn-lynx")
                 .version("1.0").build();
     }
 }

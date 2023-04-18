@@ -1,7 +1,7 @@
 package com.java.main.springstarter.v1.models;
 
+import com.java.main.springstarter.v1.enums.ECourseStatus;
 import com.java.main.springstarter.v1.enums.ECurrency;
-import com.java.main.springstarter.v1.enums.EcourseStatus;
 import com.java.main.springstarter.v1.fileHandling.File;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,13 +57,12 @@ public class Course {
     private File courseImage;
 
     @Enumerated(EnumType.STRING)
-    private EcourseStatus courseStatus=EcourseStatus.DRAFT;
+    private ECourseStatus courseStatus=ECourseStatus.DRAFT;
 
     @Column(name = "course_enrollment_fee")
     private int courseEnrollmentFee;
 
     @Column(name = "course_enrollment_fee_currency")
     private ECurrency currency=ECurrency.RWF;
-
 
 }
