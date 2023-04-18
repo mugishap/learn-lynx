@@ -30,12 +30,13 @@ public class Lesson {
     @Column(name = "lesson_description")
     private String lessonDescription;
 
-    @Column(name = "lesson_content")
-    private String lessonContent;
-
     @OneToMany
     @JoinColumn(name = "lesson_multimedia")
     private List<File> lessonMultimedia;
+
+    @ManyToOne
+    @JoinColumn(name = "course")
+    private Course course;
 
     @Enumerated(EnumType.STRING)
     private ELessonStatus courseStatus=ELessonStatus.DRAFT;

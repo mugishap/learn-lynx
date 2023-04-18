@@ -12,6 +12,7 @@ import com.java.main.springstarter.v1.security.JwtTokenProvider;
 import com.java.main.springstarter.v1.services.IUserService;
 import com.java.main.springstarter.v1.services.MailService;
 import com.java.main.springstarter.v1.utils.Utility;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/auth")
 public class AuthenticationController {
 
@@ -35,18 +37,6 @@ public class AuthenticationController {
     private final JwtTokenProvider jwtTokenProvider;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final MailService mailService;
-
-    @Autowired
-    public AuthenticationController(IUserService userService, AuthenticationManager authenticationManager,
-                                    JwtTokenProvider jwtTokenProvider, MailService mailService,
-                                    BCryptPasswordEncoder bCryptPasswordEncoder) {
-        this.userService = userService;
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.mailService = mailService;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
-
 
     @PostMapping(path = "/signin")
     public ResponseEntity<JwtAuthenticationResponse> signin(@Valid @RequestBody SignInDTO dto) {

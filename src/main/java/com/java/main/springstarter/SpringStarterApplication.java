@@ -30,7 +30,9 @@ public class SpringStarterApplication {
     public void registerRoles() {
         Set<ERole> roles = new HashSet<>();
         roles.add(ERole.ADMIN);
-        roles.add(ERole.NORMAL);
+        roles.add(ERole.LECTURER);
+        roles.add(ERole.STUDENT);
+        roles.add(ERole.SCHOOL_ADMIN);
 
         for (ERole role : roles) {
             Optional<Role> roleByName = roleRepository.findByName(role);
@@ -38,7 +40,6 @@ public class SpringStarterApplication {
                 Role newRole = new Role(role, role.toString());
                 roleRepository.save(newRole);
                 System.out.println("Created: " + role.toString());
-
             }
         }
     }

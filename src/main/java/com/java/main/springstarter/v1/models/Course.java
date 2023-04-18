@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,6 +65,23 @@ public class Course {
     private int courseEnrollmentFee;
 
     @Column(name = "course_enrollment_fee_currency")
-    private ECurrency currency=ECurrency.RWF;
+    private ECurrency courseEnrollmentFeeCurrency=ECurrency.RWF;
+
+    @OneToMany
+    @JoinColumn(name="lessons_in_course")
+    private List<Lesson> lessonsInCourse;
+
+    public Course(String courseTitle,String courseDescription, File courseIntroductoryVideo,File courseImage,int courseDuration,int courseStartDate, int courseEnrollmentFee, ECurrency courseEnrollmentFeeCurrency,List<Tag> tags,User courseInstructor){
+         this.courseTitle=courseTitle;
+         this.courseStartDate= LocalDate.ofInstant(Instant.ofEpochMilli(courseStartDate), ZoneId.systemDefault());
+         this.courseDescription=courseDescription;
+         this.courseIntroductoryVideo=courseIntroductoryVideo;
+         this.courseImage=courseImage;
+         this.courseDuration=courseDuration;
+         this.courseEnrollmentFee=courseEnrollmentFee;
+         this.courseEnrollmentFeeCurrency=courseEnrollmentFeeCurrency;
+         this.courseTags=tags;
+         this.courseInstructor=courseInstructor;
+    }
 
 }

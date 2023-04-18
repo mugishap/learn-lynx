@@ -37,12 +37,14 @@ public class Enrollment extends TimestampAudit {
     @Column(name = "enrollment_certificate_status")
     private EEnrollmentCertificateStatus enrollmentCertificateStatus = EEnrollmentCertificateStatus.NOT_ISSUED;
 
-    @ManyToOne
-    @JoinColumn(name = "enrolled_by")
-    private User enrolledBy;
-
     @ManyToOne()
-    @JoinColumn(name = "course")
+    @JoinColumn(name = "course_attended")
     private Course course;
 
+    @ManyToOne()
+    @JoinColumn()
+    private User user;
+
+    @Column(name = "fee_paid")
+    private boolean isFeePaid=false;
 }

@@ -12,6 +12,7 @@ import com.java.main.springstarter.v1.security.JwtTokenProvider;
 import com.java.main.springstarter.v1.services.IFileService;
 import com.java.main.springstarter.v1.services.IUserService;
 import com.java.main.springstarter.v1.utils.Constants;
+import lombok.RequiredArgsConstructor;
 import org.apache.catalina.Cluster;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping(path = "/api/v1/users")
 public class UserController {
 
@@ -47,18 +49,6 @@ public class UserController {
 
     @Value("${uploads.directory.user_profiles}")
     private String directory;
-
-    @Autowired
-    public UserController(IUserService userService, IRoleRepository roleRepository,
-                          BCryptPasswordEncoder bCryptPasswordEncoder, JwtTokenProvider jwtTokenProvider,
-                          FileStorageService fileStorageService, IFileService fileService) {
-        this.userService = userService;
-        this.roleRepository = roleRepository;
-        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.fileService = fileService;
-        this.fileStorageService = fileStorageService;
-    }
 
     @GetMapping(path = "/current-user")
     public ResponseEntity<ApiResponse> currentlyLoggedInUser(){
