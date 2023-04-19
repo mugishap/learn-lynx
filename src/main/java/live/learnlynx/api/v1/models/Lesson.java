@@ -38,5 +38,12 @@ public class Lesson {
     private Course course;
 
     @Enumerated(EnumType.STRING)
-    private ELessonStatus courseStatus=ELessonStatus.DRAFT;
+    private ELessonStatus courseStatus = ELessonStatus.DRAFT;
+
+    public Lesson(String title, String description, Course course, List<File> lessonMultimedia) {
+        this.lessonTitle = title;
+        this.lessonDescription = description;
+        this.course = course;
+        this.lessonMultimedia = lessonMultimedia;
+    }
 }

@@ -9,8 +9,6 @@ import java.util.UUID;
 public interface IEnrollmentService {
 
     public Enrollment createEnrollment(CreateEnrollmentDTO dto);
-    public Enrollment payEnrollment(UUID enrollmentId);
-    public String deleteEnrollment();
     public List<Enrollment> getAllEnrollments();
     public List<Enrollment> getAllEnrollmentsForLoggedInUser();
     public List<Enrollment> getAllEnrollmentsByUserId(UUID userId);

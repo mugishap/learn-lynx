@@ -6,12 +6,12 @@ import lombok.Setter;
 
 import java.util.UUID;
 
+@Data
 @Getter
 @Setter
-@Data
-public class CreateEnrollmentDTO {
+public class DeleteLessonMultimediaDTO {
 
-    private UUID courseId;
-    private boolean isFeePaid;
+    private UUID lessonId;
+    private UUID fileId;
 
 }

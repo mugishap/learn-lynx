@@ -11,9 +11,16 @@ import java.util.UUID;
 public interface ILessonService {
 
     public Lesson createLesson(CreateLessonDTO dto, List<File> lessonMultimedia);
-    public Lesson updateLesson(UpdateLessonDTO dto, List<File> lessonMultimedia);
+
+    public Lesson updateLesson(UUID lessonId, UpdateLessonDTO dto);
+
+    public Lesson addLessonMultimedia(UUID lessonId, File newLessonMultimedia);
+    public Lesson deleteLessonMultimedia(UUID lessonId, File lessonMultimediaToRemove);
+
     public String deleteLesson(UUID lessonId);
+
     public List<Lesson> getLessonsByCourse(UUID courseId);
+
     public Lesson getLessonById(UUID lessonId);
 
 }
