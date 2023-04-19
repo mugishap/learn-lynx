@@ -9,6 +9,7 @@ import live.learnlynx.api.v1.fileHandling.FileStorageService;
 import live.learnlynx.api.v1.repositories.IFileRepository;
 import live.learnlynx.api.v1.services.IFileService;
 import live.learnlynx.api.v1.utils.FileUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class FileServiceImpl  implements IFileService {
     private final IFileRepository fileRepository;
     private final FileStorageService fileStorageService;
@@ -34,11 +36,6 @@ public class FileServiceImpl  implements IFileService {
     @Value("${uploads.extensions}")
     private String extensions;
 
-    @Autowired
-    public FileServiceImpl(IFileRepository fileRepository, FileStorageService fileStorageService) {
-        this.fileRepository = fileRepository;
-        this.fileStorageService = fileStorageService;
-    }
 
     @Override
     public List<File> getAll() {

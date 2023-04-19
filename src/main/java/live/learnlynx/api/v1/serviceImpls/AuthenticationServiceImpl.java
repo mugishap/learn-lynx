@@ -65,7 +65,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         user.getPasswordReset().setPasswordResetToken(Utility.randomUUID(6, 0, 'N'));
         user.getPasswordReset().setPasswordResetStatus(EPasswordResetStatus.PENDING);
 
-        this.userService.create(user);
+        this.userRepository.save(user);
 
         mailService.sendResetPasswordMail(user.getEmail(), user.getFirstName() + " " + user.getLastName(), user.getPasswordReset().getPasswordResetToken());
         return "Please check your mail and activate account";
@@ -90,6 +90,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
     public String initiateAccountVerification() {
         User user = this.userService.getLoggedInUser();
         Verification verification = user.getVerification();
+        System.out.println(verification);
         verification.setVerificationStatus(EVerificationStatus.PENDING);
         verification.setVerificationToken(Utility.randomUUID(8, 1, 'N'));
         verification.setVerificationExpiresAt(LocalDateTime.now().plusHours(5));
@@ -108,6 +109,7 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
         verification.setLastVerifiedAt(LocalDateTime.now());
         verification.setVerificationStatus(EVerificationStatus.VERIFIED);
         verification.setVerificationExpiresAt(null);
+        this.verificationRepository.save(verification);
         return "Account verified successfully";
     }
 }

@@ -11,7 +11,7 @@ import java.util.UUID;
 @Repository
 public interface IVerificationRepository extends JpaRepository<Verification, UUID> {
 
-    @Query("SELECT v FROM Verification v WHERE v.verificationToken=:accountVerificationToken AND v.verificationExpiresAt > local_datetime ")
+    @Query("SELECT v FROM Verification v WHERE v.verificationToken=:accountVerificationToken AND v.verificationExpiresAt > current_timestamp ")
     public Optional<Verification> getVerificationByToken(String accountVerificationToken);
 }
 
