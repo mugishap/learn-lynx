@@ -1,11 +1,12 @@
 package live.learnlynx.api.v1.serviceImpls;
 
+import live.learnlynx.api.v1.dtos.UpdateUserDTO;
 import live.learnlynx.api.v1.enums.ERole;
-import live.learnlynx.api.v1.enums.EUserStatus;
 import live.learnlynx.api.v1.exceptions.BadRequestException;
 import live.learnlynx.api.v1.exceptions.ResourceNotFoundException;
 import live.learnlynx.api.v1.fileHandling.File;
 import live.learnlynx.api.v1.models.User;
+import live.learnlynx.api.v1.models.Verification;
 import live.learnlynx.api.v1.repositories.IUserRepository;
 import live.learnlynx.api.v1.services.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,34 +52,37 @@ public class UserServiceImpl implements IUserService {
         Optional<User> userOptional = this.userRepository.findByEmail(user.getEmail());
         if (userOptional.isPresent())
             throw new BadRequestException(String.format("User with email '%s' already exists", user.getEmail()));
-
+        Verification verification = new Verification();
+        user.setVerification(verification);
         return this.userRepository.save(user);
     }
 
     @Override
-    public User update(UUID id, User user) {
-        User entity = this.userRepository.findById(id).orElseThrow(
-                () ->  new ResourceNotFoundException("User", "id", id.toString()));
-
-        Optional<User> userOptional = this.userRepository.findByEmail(user.getEmail());
+    public User update(UpdateUserDTO dto) {
+        User entity = this.getLoggedInUser();
+        Optional<User> userOptional = this.userRepository.findByEmail(dto.getEmail());
         if (userOptional.isPresent() && (userOptional.get().getId() != entity.getId()))
             throw new BadRequestException(String.format("User with email '%s' already exists", entity.getEmail()));
 
-        entity.setEmail(user.getEmail());
-        entity.setFirstName(user.getFirstName());
-        entity.setLastName(user.getLastName());
-        entity.setMobile(user.getMobile());
-        entity.setGender(user.getGender());
+        entity.setEmail(dto.getEmail());
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+        entity.setMobile(dto.getMobile());
+        entity.setGender(dto.getGender());
 
 
         return this.userRepository.save(entity);
     }
 
     @Override
-    public boolean delete(UUID id) {
-        this.userRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("User", "id", id));
+    public boolean delete() {
+        User user = this.getLoggedInUser();
+        this.userRepository.deleteById(user.getId());
+        return true;
+    }
 
+    @Override
+    public boolean deleteById(UUID id) {
         this.userRepository.deleteById(id);
         return true;
     }
@@ -125,17 +129,6 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-
-    @Override
-    public User changeStatus(UUID id, EUserStatus status) {
-        User entity = this.userRepository.findById(id).orElseThrow(
-                () ->  new ResourceNotFoundException("User", "id", id.toString()));
-
-        entity.setStatus(status);
-
-        return  this.userRepository.save(entity);
-    }
-
     @Override
     public User changeProfileImage(UUID id, File file) {
         User entity = this.userRepository.findById(id).orElseThrow(
@@ -143,6 +136,5 @@ public class UserServiceImpl implements IUserService {
 
         entity.setProfileImage(file);
         return  this.userRepository.save(entity);
-
     }
 }

@@ -3,7 +3,6 @@ package live.learnlynx.api.v1.models;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import live.learnlynx.api.v1.audits.TimestampAudit;
 import live.learnlynx.api.v1.enums.EGender;
-import live.learnlynx.api.v1.enums.EUserStatus;
 import live.learnlynx.api.v1.fileHandling.File;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -52,24 +51,23 @@ public class User extends TimestampAudit {
     @Column(name="gender")
     private EGender gender;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status")
-    private EUserStatus status = EUserStatus.PENDING;
-
     @JoinColumn(name="profile_image_id")
     @OneToOne(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private File profileImage;
 
 
-    @Column(name="activation_code")
-    private String activationCode;
-
-
-
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @OneToOne
+    @JoinColumn(name = "verification")
+    private Verification verification;
+
+    @OneToOne
+    @JoinColumn(name = "password_reset")
+    private PasswordReset passwordReset;
 
     public User(String email, String firstName, String lastName, String mobile, EGender gender, String password) {
         this.email = email;

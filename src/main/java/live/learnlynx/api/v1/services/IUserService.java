@@ -1,7 +1,7 @@
 package live.learnlynx.api.v1.services;
 
+import live.learnlynx.api.v1.dtos.UpdateUserDTO;
 import live.learnlynx.api.v1.enums.ERole;
-import live.learnlynx.api.v1.enums.EUserStatus;
 import live.learnlynx.api.v1.fileHandling.File;
 import live.learnlynx.api.v1.models.User;
 import org.springframework.data.domain.Page;
@@ -22,9 +22,10 @@ public interface IUserService {
 
     public User create(User user);
 
-    public User update(UUID id, User user);
+    public User update(UpdateUserDTO dto);
 
-    public boolean delete(UUID id);
+    public boolean delete();
+    public boolean deleteById(UUID id);
 
     public List<User> getAllByRole(ERole role);
 
@@ -37,8 +38,6 @@ public interface IUserService {
     public User getLoggedInUser();
 
     public User getByEmail(String email);
-
-    public User changeStatus(UUID id, EUserStatus status);
 
     public User changeProfileImage(UUID id, File file);
 

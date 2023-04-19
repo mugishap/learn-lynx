@@ -2,7 +2,6 @@ package live.learnlynx.api.v1.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import live.learnlynx.api.v1.enums.EGender;
-import live.learnlynx.api.v1.enums.EUserStatus;
 import live.learnlynx.api.v1.models.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,9 +35,6 @@ public class UserPrincipal implements UserDetails {
     @JsonIgnore
     private String password;
 
-    private EUserStatus status;
-
-
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserPrincipal create(User user) {
@@ -53,7 +49,6 @@ public class UserPrincipal implements UserDetails {
                 user.getMobile(),
                 user.getGender(),
                 user.getPassword(),
-                user.getStatus(),
                 authorities);
     }
 

@@ -1,6 +1,8 @@
 package live.learnlynx.api.v1.controllers;
 
 import live.learnlynx.api.v1.dtos.SignUpDTO;
+import live.learnlynx.api.v1.dtos.UpdateUserDTO;
+import live.learnlynx.api.v1.enums.ERole;
 import live.learnlynx.api.v1.exceptions.BadRequestException;
 import live.learnlynx.api.v1.fileHandling.File;
 import live.learnlynx.api.v1.fileHandling.FileStorageService;
@@ -48,8 +50,8 @@ public class UserController {
     private String directory;
 
     @GetMapping(path = "/current-user")
-    public ResponseEntity<ApiResponse> currentlyLoggedInUser(){
-        return ResponseEntity.ok(new ApiResponse(true,  userService.getLoggedInUser()));
+    public ResponseEntity<ApiResponse> currentlyLoggedInUser() {
+        return ResponseEntity.ok(new ApiResponse(true, userService.getLoggedInUser()));
     }
 
     @GetMapping
@@ -57,7 +59,7 @@ public class UserController {
         return this.userService.getAll();
     }
 
-    @GetMapping(path="/paginated")
+    @GetMapping(path = "/paginated")
     public Page<User> getAllUsers(@RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
                                   @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int limit
     ) {
@@ -65,19 +67,19 @@ public class UserController {
         return userService.getAll(pageable);
     }
 
-    @GetMapping(path="/{id}")
+    @GetMapping(path = "/{id}")
     public ResponseEntity<User> getById(@PathVariable(value = "id") UUID id) {
         return ResponseEntity.ok(this.userService.getById(id));
     }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<ApiResponse> register(@RequestBody @Valid SignUpDTO dto){
+    public ResponseEntity<ApiResponse> register(@RequestBody @Valid SignUpDTO dto) {
 
         User user = new User();
 
         String encodedPassword = bCryptPasswordEncoder.encode(dto.getPassword());
         Role role = roleRepository.findByName(dto.getRole()).orElseThrow(
-                ()-> new BadRequestException("User Role not set"));
+                () -> new BadRequestException("User Role not set"));
 
         user.setEmail(dto.getEmail());
         user.setFirstName(dto.getFirstName());
@@ -92,7 +94,12 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse(true, entity));
     }
 
-    @PutMapping(path="/{id}/upload-profile")
+    @PatchMapping("/update")
+    public ResponseEntity<ApiResponse> updateUser(@RequestBody UpdateUserDTO dto) {
+        return ResponseEntity.ok().body(new ApiResponse(true, "Updated user successfully", this.userService.update(dto)));
+    }
+
+    @PutMapping(path = "/{id}/upload-profile")
     public ResponseEntity<ApiResponse> uploadProfileImage(
             @PathVariable(value = "id") UUID id,
             @RequestParam("file") MultipartFile document
@@ -115,6 +122,46 @@ public class UserController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
+    }
+
+    @DeleteMapping("/delete")
+    private ResponseEntity<ApiResponse> deleteUser() {
+        return ResponseEntity.ok()
+                .body(new ApiResponse(true, "User deleted successfully", this.userService.delete()));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    private ResponseEntity<ApiResponse> deleteUserbyId(@PathVariable(name = "id") UUID userId) {
+        return ResponseEntity.ok()
+                .body(new ApiResponse(true, "User deleted successfully", this.userService.deleteById(userId)));
+    }
+
+    @GetMapping("/role/{role}")
+    private ResponseEntity<ApiResponse> getUsersByRole(@PathVariable(name = "role") ERole role) {
+        return ResponseEntity.ok().body(new ApiResponse(true, "Users fetched successfully", this.userService.getAllByRole(role)));
+    }
+
+    @GetMapping("/paginated/role/{role}")
+    private ResponseEntity<ApiResponse> getUsersPaginatedByRole(
+            @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int limit,
+            @PathVariable(name = "role") ERole role) {
+        Pageable pageable = (Pageable) PageRequest.of(page, limit, Sort.Direction.ASC, "id");
+        return ResponseEntity.ok().body(new ApiResponse(true, "Users fetched successfully", this.userService.getAllByRole(pageable, role)));
+    }
+
+    @GetMapping("/search/{query}")
+    private ResponseEntity<ApiResponse> searchUsers(@PathVariable(name = "query") String query) {
+        return ResponseEntity.ok().body(new ApiResponse(true, "Users fetched successfully", this.userService.searchUser(query)));
+    }
+
+    @GetMapping("/search/paginated/{query}")
+    private ResponseEntity<ApiResponse> searchUsersPaginated(
+            @RequestParam(value = "page", defaultValue = Constants.DEFAULT_PAGE_NUMBER) int page,
+            @RequestParam(value = "size", defaultValue = Constants.DEFAULT_PAGE_SIZE) int limit,
+            @PathVariable(name = "query") String query) {
+        Pageable pageable = (Pageable) PageRequest.of(page, limit, Sort.Direction.ASC, "id");
+        return ResponseEntity.ok().body(new ApiResponse(true, "Users fetched successfully", this.userService.searchUser(pageable, query)));
     }
 
     private User convertDTO(SignUpDTO dto) {
