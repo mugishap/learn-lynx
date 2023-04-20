@@ -42,6 +42,6 @@ public class TagServiceImpl implements ITagService {
 
     @Override
     public List<Tag> getTags() {
-        return this.tagRepository.findAll().subList(0,100);
+        return this.tagRepository.findAll();
     }
 }

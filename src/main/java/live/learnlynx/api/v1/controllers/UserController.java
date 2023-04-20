@@ -99,15 +99,13 @@ public class UserController {
         return ResponseEntity.ok().body(new ApiResponse(true, "Updated user successfully", this.userService.update(dto)));
     }
 
-    @PutMapping(path = "/{id}/upload-profile")
+    @PutMapping(path = "/upload-profile")
     public ResponseEntity<ApiResponse> uploadProfileImage(
-            @PathVariable(value = "id") UUID id,
             @RequestParam("file") MultipartFile document
     ) {
-        this.userService.getById(id);
         File file = this.fileService.create(document, directory);
-
-        User updated = this.userService.changeProfileImage(id, file);
+        UUID userId = this.userService.getLoggedInUser().getId();
+        User updated = this.userService.changeProfileImage(userId, file);
 
         return ResponseEntity.ok(new ApiResponse(true, "File saved successfully", updated));
 

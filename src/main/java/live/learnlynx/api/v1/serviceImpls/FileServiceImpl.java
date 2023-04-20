@@ -10,13 +10,11 @@ import live.learnlynx.api.v1.repositories.IFileRepository;
 import live.learnlynx.api.v1.services.IFileService;
 import live.learnlynx.api.v1.utils.FileUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -57,7 +55,6 @@ public class FileServiceImpl  implements IFileService {
     public File create(MultipartFile document, String directory) {
         File file = new File();
         file.setStatus(EFileStatus.PENDING);
-
 
         String fileName = FileUtil.generateUUID(Objects.requireNonNull(document.getOriginalFilename()));
         String documentSizeType = FileUtil.getFileSizeTypeFromFileSize(file.getSize());

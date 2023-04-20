@@ -9,6 +9,7 @@ import live.learnlynx.api.v1.services.IFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -30,8 +31,9 @@ public class CourseController {
     @Value("${uploads.directory.course_intro_videos}")
     private String courseIntroductoryVideosUploadDirectory;
 
+    @PreAuthorize("hasRole('LECTURER')")
     @PostMapping("/create")
-    public ResponseEntity<ApiResponse> createCourse(@RequestBody CreateCourseDTO dto, @RequestPart("courseImage") MultipartFile courseImageFile, @RequestPart("courseIntroductoryVideo") MultipartFile courseIntroductoryVideoFile) {
+    public ResponseEntity<ApiResponse> createCourse(@RequestBody CreateCourseDTO dto, @RequestParam("courseImage") MultipartFile courseImageFile, @RequestParam("courseIntroductoryVideo") MultipartFile courseIntroductoryVideoFile) {
         File courseImage = this.fileService.create(courseImageFile, courseImagesUploadDirectory);
         File courseIntroductoryVideo = this.fileService.create(courseIntroductoryVideoFile, courseIntroductoryVideosUploadDirectory);
         URI uri = URI.create(ServletUriComponentsBuilder.fromPath("/api/v1/course/create").toString());

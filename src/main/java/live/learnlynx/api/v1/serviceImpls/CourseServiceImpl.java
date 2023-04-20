@@ -69,7 +69,7 @@ public class CourseServiceImpl implements ICourseService {
 
     @Override
     public List<Course> getCourses() {
-        List<Course> courses = this.courseRepository.findAll().subList(0,100);
+        List<Course> courses = this.courseRepository.findAll();
         return courses;
     }
 
